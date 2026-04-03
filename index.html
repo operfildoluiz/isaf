@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISAF - Integrated System Architecture Framework</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ISAF - Integrated System Architecture Framework" />
+    <meta property="og:description" content="ISAF - Integrated System Architecture Framework" />
+    <meta property="og:url" content="https://operfildoluiz.github.io/isaf" />
+    <meta property="og:image" content="og_image.png" />
+    <meta property="og:site_name" content="ISAF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #1a1a18;
+        --paper: #fafaf7;
+        --rule: #d8d4cc;
+        --ghost: #888880;
+        --accent: #b03a10;
+        --indent: 2.4rem;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Libre Baskerville", serif;
+        background: var(--paper);
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .page {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 5rem 2rem 8rem;
+      }
+
+      /* HEADER */
+      header {
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .doc-id {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ghost);
+        margin-bottom: 1.8rem;
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .doc-id span {
+        color: var(--accent);
+      }
+
+      h1 {
+        font-family: "Libre Baskerville", serif;
+        font-size: clamp(1.7rem, 4vw, 2.4rem);
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.6rem;
+      }
+
+      .subtitle {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 300;
+        color: var(--ghost);
+        font-style: italic;
+        margin-bottom: 2rem;
+      }
+
+      .meta-block {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.82rem;
+        color: var(--ghost);
+        line-height: 2;
+        border-top: 1px solid var(--rule);
+        padding-top: 1.2rem;
+        margin-top: 1.2rem;
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 0.1rem 0;
+      }
+      .meta-block dt {
+        font-weight: 600;
+        color: var(--ink);
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        padding-top: 0.15rem;
+      }
+      .meta-block dd {
+        color: var(--ghost);
+      }
+      .meta-block a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .meta-block a:hover {
+        text-decoration: underline;
+      }
+
+      /* TOC */
+      nav.toc {
+        background: #f0ede6;
+        border: 1px solid var(--rule);
+        padding: 1.5rem 2rem;
+        margin-bottom: 4rem;
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.85rem;
+      }
+      nav.toc .toc-title {
+        font-weight: 600;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ghost);
+        margin-bottom: 0.8rem;
+      }
+      nav.toc ol {
+        list-style: none;
+        counter-reset: toc;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      nav.toc li {
+        counter-increment: toc;
+        display: flex;
+        gap: 0.8rem;
+        align-items: baseline;
+      }
+      nav.toc li::before {
+        content: counter(toc) ".";
+        font-variant-numeric: tabular-nums;
+        color: var(--ghost);
+        min-width: 1.2rem;
+      }
+      nav.toc a {
+        color: var(--ink);
+        text-decoration: none;
+      }
+      nav.toc a:hover {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+      nav.toc .sub {
+        padding-left: 2rem;
+        margin-top: 0.25rem;
+        counter-reset: toc-sub;
+      }
+      nav.toc .sub li {
+        counter-increment: toc-sub;
+      }
+      nav.toc .sub li::before {
+        content: counter(toc-sub, lower-alpha) ".";
+      }
+
+      /* SECTIONS */
+      section {
+        margin-bottom: 4rem;
+      }
+      section + section {
+        border-top: 1px solid var(--rule);
+        padding-top: 3.5rem;
+      }
+
+      .section-num {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ghost);
+        margin-bottom: 0.5rem;
+      }
+
+      h2 {
+        font-family: "Libre Baskerville", serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 1.4rem;
+      }
+
+      h3 {
+        font-family: "Libre Baskerville", serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-top: 2.2rem;
+        margin-bottom: 0.7rem;
+      }
+
+      p {
+        margin-bottom: 1.2rem;
+        font-size: 0.97rem;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+
+      /* PHASE BLOCKS */
+      .phase-block {
+        margin: 2.5rem 0;
+        padding-left: var(--indent);
+        border-left: 3px solid var(--rule);
+      }
+
+      .phase-label {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.3rem;
+      }
+
+      .phase-block h3 {
+        margin-top: 0;
+      }
+
+      /* PRINCIPLES LIST */
+      .principles {
+        list-style: none;
+        counter-reset: princ;
+        margin: 1.5rem 0 1.5rem var(--indent);
+      }
+      .principles li {
+        counter-increment: princ;
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 1.2rem;
+        font-size: 0.97rem;
+      }
+      .principles li::before {
+        content: counter(princ) ".";
+        position: absolute;
+        left: 0;
+        font-family: "Libre Franklin", sans-serif;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: var(--ghost);
+        top: 0.15rem;
+      }
+      .principles li strong {
+        display: block;
+        font-family: "Libre Franklin", sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.2rem;
+        color: var(--ink);
+      }
+
+      /* FAILURE MODES */
+      .failure-modes {
+        list-style: none;
+        margin: 1.5rem 0 1.5rem var(--indent);
+        counter-reset: fail;
+      }
+      .failure-modes li {
+        counter-increment: fail;
+        padding-left: 3rem;
+        position: relative;
+        margin-bottom: 1.2rem;
+        font-size: 0.97rem;
+      }
+      .failure-modes li::before {
+        content: "F-0" counter(fail);
+        position: absolute;
+        left: 0;
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: var(--accent);
+        top: 0.22rem;
+        letter-spacing: 0.05em;
+      }
+      .failure-modes li strong {
+        font-family: "Libre Franklin", sans-serif;
+        font-weight: 600;
+      }
+
+      /* BLOCKQUOTE */
+      blockquote {
+        margin: 2rem 0 2rem var(--indent);
+        padding-left: 1.5rem;
+        border-left: 3px solid var(--ink);
+        font-style: italic;
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.75;
+      }
+
+      /* CODE */
+      code {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        background: #eae7df;
+        padding: 0.1em 0.4em;
+        border-radius: 2px;
+        letter-spacing: 0.03em;
+      }
+
+      /* CITE BOX */
+      .cite-box {
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.82rem;
+        background: #f0ede6;
+        border: 1px solid var(--rule);
+        padding: 1.4rem 1.8rem;
+        line-height: 1.9;
+        color: #555;
+        margin: 1.5rem 0;
+      }
+      .cite-box a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .cite-box a:hover {
+        text-decoration: underline;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 2px solid var(--ink);
+        padding-top: 1.5rem;
+        margin-top: 5rem;
+        font-family: "Libre Franklin", sans-serif;
+        font-size: 0.78rem;
+        color: var(--ghost);
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 600px) {
+        .page {
+          padding: 3rem 1.4rem 6rem;
+        }
+        .phase-block {
+          padding-left: 1.2rem;
+        }
+        .principles,
+        .failure-modes {
+          margin-left: 0;
+        }
+        .meta-block {
+          grid-template-columns: 1fr;
+        }
+        .meta-block dt {
+          margin-top: 0.5rem;
+        }
+        footer {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div class="doc-id">
+          <span>ISAF-1.0</span>
+          <span>Last Updated at March 2026</span>
+        </div>
+        <h1>Integrated System Architecture Framework</h1>
+        <p class="subtitle">A five-phase methodology for enterprise system integration in regulated industries</p>
+        <dl class="meta-block">
+          <dt>Author</dt>
+          <dd>Luiz Goncalves &mdash; Senior Software Engineer &amp; System Integration Architect</dd>
+          <dt>Version</dt>
+          <dd>1.0</dd>
+          <dt>Published</dt>
+          <dd>March 2026</dd>
+          <dt>Full paper</dt>
+          <dd>
+            <a
+              href="https://medium.com/@operfildoluiz/why-most-system-integration-projects-fail-and-the-five-phase-framework-that-fixes-it-753ddee48170"
+              target="_blank"
+              >"Why Most System Integration Projects Fail" - Medium, 2026</a
+            >
+          </dd>
+          <dt>License</dt>
+          <dd>
+            <a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a> - You may share this work with attribution. Modifications
+            and derivatives are not permitted.
+          </dd>
+        </dl>
+      </header>
+
+      <nav class="toc">
+        <p class="toc-title">Contents</p>
+        <ol>
+          <li><a href="#background">Background</a></li>
+          <li><a href="#failure-modes">The Four Failure Modes</a></li>
+          <li>
+            <a href="#framework">The ISAF Framework (DIACO)</a>
+            <ol class="sub">
+              <li><a href="#phase-1">Diagnostic Assessment</a></li>
+              <li><a href="#phase-2">Architectural Integration</a></li>
+              <li><a href="#phase-3">Intelligent Automation</a></li>
+              <li><a href="#phase-4">Compliance Engineering</a></li>
+              <li><a href="#phase-5">Continuous Optimization</a></li>
+            </ol>
+          </li>
+          <li><a href="#principles">Design Principles</a></li>
+          <li><a href="#scope">Scope and Applicability</a></li>
+          <li><a href="#citation">How to Cite</a></li>
+        </ol>
+      </nav>
+
+      <section id="background">
+        <p class="section-num">1.</p>
+        <h2>Background</h2>
+        <p>
+          ISAF is a five-phase methodology for designing and implementing integration infrastructure in regulated industries. It was developed through over a
+          decade of enterprise integration work across healthcare, financial services, fintech, and insurtech organizations.
+        </p>
+        <p>
+          The framework is not a vendor selection guide and not a project management methodology. It does not prescribe tools. It prescribes a sequence - and
+          the reasoning behind that sequence.
+        </p>
+        <p>
+          Almost every organization operating in regulated industries eventually reaches the same condition: a digital environment built tool by tool, problem
+          by problem, without an underlying architectural strategy. Systems were connected as each need arose. Automations were added on top of those
+          connections. Compliance controls were layered on top of those automations. The result is what ISAF calls the <em>assembled system</em> - an
+          environment that works until something changes, and something always changes.
+        </p>
+        <p>
+          The assembled system has a recognizable fingerprint: multiple point-to-point connections between systems, some undocumented; automations that handle
+          standard cases and route exceptions to someone's inbox; compliance controls that make audits expensive and slow; dashboards built on data nobody fully
+          trusts.
+        </p>
+        <p>ISAF is the structured response to that condition.</p>
+      </section>
+
+      <section id="failure-modes">
+        <p class="section-num">2.</p>
+        <h2>The Four Failure Modes</h2>
+        <p>
+          Before describing the framework, it is useful to name the failure modes precisely. Most integration efforts fail by addressing one or two of them
+          while leaving the others intact. The four modes are not independent - they reinforce each other structurally.
+        </p>
+        <ul class="failure-modes">
+          <li>
+            <strong>Point-to-point proliferation.</strong> Two systems get connected, then three more, then a vendor is replaced and the connections multiply.
+            The result is a web of direct integrations that no single engineer fully understands. This is not bad engineering compounding over time - it is the
+            predictable outcome of solving integration problems one at a time without an architectural layer in between.
+          </li>
+          <li>
+            <strong>Automation without integration.</strong> A team automates a workflow. The automation works correctly in isolation and produces a clean
+            output, which then feeds into a manual process on the other side because the adjacent system was never connected to the same data model. The
+            bottleneck moved. It did not disappear.
+          </li>
+          <li>
+            <strong>Compliance as an afterthought.</strong> In regulated industries, security and compliance requirements are typically incorporated after the
+            functional architecture is in place. The result is controls bolted onto systems that were not designed for them. Audits become manual reconciliation
+            exercises - exporting data from multiple systems in incompatible formats and spending days assembling it. This is not an edge case; it is the
+            dominant compliance pattern in regulated industries today.
+          </li>
+          <li>
+            <strong>Optimization theater.</strong> Once an organization has enough tooling to produce dashboards and metrics, it often develops a false sense of
+            operational visibility. The dashboards look sophisticated. The underlying data is assembled from manual exports, inconsistently defined across
+            source systems, and updated on a schedule that lags operational reality.
+          </li>
+        </ul>
+        <p>
+          These four failure modes feed each other. Point-to-point proliferation makes automation fragile. Automation without integration produces data
+          inconsistencies that make compliance harder. Compliance as an afterthought limits the quality of operational data available for optimization.
+          Addressing one while leaving the others intact moves the problem.
+        </p>
+      </section>
+
+      <section id="framework">
+        <p class="section-num">3.</p>
+        <h2>The ISAF Framework</h2>
+        <p>
+          ISAF organizes integration work into five phases. The phases are named by their initials: <strong>D</strong>iagnostic Assessment, Architectural
+          <strong>I</strong>ntegration, Intelligent <strong>A</strong>utomation, <strong>C</strong>ompliance Engineering, Continuous
+          <strong>O</strong>ptimization - forming the acronym <code>DIACO</code>.
+        </p>
+        <p>
+          Each phase depends structurally on the previous one. The sequence is not a procedural preference - it is the mechanism. Skipping or compressing phases
+          under schedule pressure produces the exact failure modes described in Section 2.
+        </p>
+        <p>
+          One exception to strict sequencing: Phase 4 (Compliance Engineering) runs in parallel with Phases 2 and 3, not after them. This is intentional and
+          explained in Section 3.4.
+        </p>
+
+        <div class="phase-block" id="phase-1">
+          <p class="phase-label">D - Phase 01 / Diagnostic Assessment</p>
+          <h3>Map before designing</h3>
+          <p>
+            Before any architecture is proposed or any system is changed, every system in the environment must be mapped: every integration between them, every
+            manual step in operational workflows, and every compliance obligation affecting data handling. The output is an
+            <em>architectural constraint map</em> - not a requirements document.
+          </p>
+          <p>
+            The distinction matters. A requirements document describes what the organization wants. An architectural constraint map describes what the
+            organization has: where data lives, how it moves, where it breaks, what is undocumented, and what manual processes exist because no one ever
+            connected the systems that should make them unnecessary.
+          </p>
+          <p>
+            Most integration projects go wrong first here. There is always pressure to start building immediately. But the stated problem is rarely the actual
+            problem - it is a symptom. Designing a solution for the symptom rather than the cause is the most common reason integration projects fail to deliver
+            their projected value.
+          </p>
+          <p>
+            The diagnostic phase is also where the business case for the rest of the project gets built. The highest-value interventions in any engagement are
+            frequently the ones nobody put on the priority list going in, because they were invisible. They were routine. Phase 1 surfaces them. A compressed or
+            skipped Phase 1 leaves them in place as persistent manual exceptions.
+          </p>
+        </div>
+
+        <div class="phase-block" id="phase-2">
+          <p class="phase-label">I - Phase 02 / Architectural Integration</p>
+          <h3>Replace the assembled system with an architected one</h3>
+          <p>Phase 2 introduces two components: a <em>canonical data model</em> and a <em>unified communication layer</em>.</p>
+          <p>
+            The canonical data model is not a master data standard imposed on all systems. It is a translation layer - a defined representation of the entities
+            that need to move across the environment that each system maps to through its own adapter. Legacy systems participate through adapters; new systems
+            are built to the model from the start. The consequence is that connecting a new system or replacing a vendor requires updating one adapter, not
+            rebuilding existing connections.
+          </p>
+          <p>
+            The unified communication layer - typically an API gateway combined with an event-driven messaging backbone - replaces the web of direct connections
+            with a single integration surface. The surface area of the integration problem stays constant as the organization grows, rather than expanding with
+            each new system.
+          </p>
+          <p>
+            Phase 2 is also where the compliance audit layer should be designed. Structuring unified audit output during Phase 2 - before any automation is
+            built in Phase 3 - means that compliance reporting becomes an automated query rather than a monthly manual reconciliation. This is a direct
+            consequence of phase sequencing: an architectural decision made in Phase 2 eliminates a problem that would otherwise require expensive remediation
+            in Phase 4.
+          </p>
+        </div>
+
+        <div class="phase-block" id="phase-3">
+          <p class="phase-label">A - Phase 03 / Intelligent Automation</p>
+          <h3>Automate pipelines, not tasks</h3>
+          <p>Phase 3 is where manual work is replaced. The word that matters in <em>Intelligent Automation</em> is not automation - it is intelligent.</p>
+          <p>
+            Automation built on an unintegrated environment automates individual steps while leaving the handoffs between them manual. Automation built on the
+            Phase 2 foundation is structurally different: because all systems share a canonical data model, each automated step hands off directly to the next.
+            The unit of automation is the pipeline, not the task.
+          </p>
+          <p>
+            A recurring pattern in Phase 3 work: the technical artifact is functioning correctly; what is broken is the operational process around it. A fraud
+            model with a high false-positive rate may not require replacing the model - it may require building the process that keeps the model current against
+            recent decision data. Phase 1 surfaces these findings; Phase 3 addresses them at the process level, not just the artifact level.
+          </p>
+        </div>
+
+        <div class="phase-block" id="phase-4">
+          <p class="phase-label">C - Phase 04 / Compliance Engineering</p>
+          <h3>Compliance is an architectural property, not a workstream</h3>
+          <p>Phase 4 runs in parallel with Phases 2 and 3, not after them. This is the only phase in ISAF that is not strictly sequential.</p>
+          <p>
+            The reason is cost structure. A compliance requirement identified during Phase 4 review after Phase 3 is complete requires rework. The same
+            requirement incorporated as a design constraint during Phase 2 is just a design parameter. The earlier compliance requirements enter the
+            architecture, the lower their implementation cost.
+          </p>
+          <p>
+            In practice, Phase 4 means: encryption in transit and at rest as an architectural property; role-based access controls tied to the canonical data
+            model established in Phase 2; monitoring, audit trails, and incident response workflows built as first-class system components; and regulatory
+            requirements - CFPB Section 1033, FHFA credit scoring standards, BSA/AML, HIPAA, HITECH, depending on industry - treated as design constraints
+            throughout.
+          </p>
+          <p>The result is a system that can adapt as regulatory requirements change, rather than one that requires a rebuild with each regulatory shift.</p>
+        </div>
+
+        <div class="phase-block" id="phase-5">
+          <p class="phase-label">O - Phase 05 / Continuous Optimization</p>
+          <h3>Proactive improvement on a trustworthy foundation</h3>
+          <p>
+            A deployed system is not a finished system. It degrades, scales, and encounters operational conditions that were not anticipated in the original
+            design. Phase 5 is the infrastructure that keeps the system improving after deployment.
+          </p>
+          <p>
+            The key distinction from conventional monitoring is proactive versus reactive. Conventional monitoring waits for failures and sends alerts. Phase 5
+            uses operational data to identify the next category of inefficiency before it causes a failure - surfacing friction, model drift, throughput
+            bottlenecks, and capacity constraints as ongoing inputs to a continuous improvement cycle.
+          </p>
+          <p>
+            Phase 5 is only meaningful when built on the foundation of Phases 2 and 3. Without Phase 2 integration, operational data is inconsistent across
+            source systems and cannot be trusted. Without Phase 3 automation, Phase 5 measures manual inefficiency more precisely rather than improving it.
+            Applied to a fully integrated and automated environment, Phase 5 converts operational visibility into compounding improvement.
+          </p>
+        </div>
+      </section>
+
+      <section id="principles">
+        <p class="section-num">4.</p>
+        <h2>Design Principles</h2>
+        <p>
+          The following principles describe the reasoning behind ISAF's structure. They are derived from the failure patterns observed across engagements, not
+          from theory.
+        </p>
+        <ul class="principles">
+          <li>
+            <strong>The stated problem is rarely the actual problem.</strong>
+            What organizations describe as "our systems don't talk to each other" is a symptom. Designing a solution for the stated problem without first
+            producing a constraint map will address the symptom while leaving the cause intact.
+          </li>
+          <li>
+            <strong>Automation has a structural dependency on integration.</strong>
+            The order of Phases 2 and 3 is a dependency, not a preference. Automation built on an unintegrated data environment moves bottlenecks rather than
+            removing them. The integration layer must exist before pipeline automation is meaningful.
+          </li>
+          <li>
+            <strong>Compliance is cheapest when designed in.</strong>
+            The cost of a compliance requirement is lowest when it enters the architecture as a design constraint. It rises significantly when discovered after
+            functional design is complete and must be retrofitted.
+          </li>
+          <li>
+            <strong>The framework is technology-neutral by design.</strong>
+            The failure modes ISAF addresses are not caused by specific tools. They are caused by the absence of an architectural layer, regardless of which
+            tools populate the environment. The canonical data model can be built on any API gateway or messaging technology.
+          </li>
+          <li>
+            <strong>Phase compression fails for structural reasons.</strong>
+            Running phases in parallel under schedule pressure does not accelerate delivery - it reproduces the structural conditions that cause integration
+            projects to fail. A partial diagnostic produces a partial architecture. Phase 3 automation without Phase 2 integration produces automation that
+            requires manual correction at the seams.
+          </li>
+          <li>
+            <strong>The failure modes are sector-agnostic.</strong>
+            Point-to-point proliferation, automation without integration, compliance as an afterthought, and optimization theater appear in every regulated
+            industry in which this framework has been applied. What changes across industries is the regulatory context of Phase 4 and the workflow patterns of
+            Phase 3. The diagnostic logic, integration architecture, and optimization infrastructure remain consistent.
+          </li>
+        </ul>
+      </section>
+
+      <section id="scope">
+        <p class="section-num">5.</p>
+        <h2>Scope and Applicability</h2>
+        <p>
+          ISAF was developed in the context of regulated industries with complex integration environments: healthcare, financial services, fintech, insurtech,
+          and real estate. These industries share structural characteristics - data fragmentation across multiple vendors, compliance obligations that affect
+          data handling, and organizational pressure to automate faster than integration infrastructure is ready to support.
+        </p>
+        <p>
+          The framework applies most directly to organizations that have grown through tool accumulation - where the digital environment was assembled problem
+          by problem rather than designed architecturally. The four failure modes in Section 2 are the diagnostic signal: if two or more are present, the ISAF
+          sequence applies.
+        </p>
+        <p>
+          ISAF does not apply to greenfield systems built from scratch with a unified data model. It is a framework for environments that already have
+          complexity - existing systems, existing integrations, existing compliance obligations.
+        </p>
+        <blockquote>
+          The organizations that struggle most with digital transformation are not struggling because they lack technology. They have plenty of technology. They
+          are struggling because their technology was assembled rather than architected.
+        </blockquote>
+      </section>
+
+      <section id="citation">
+        <p class="section-num">6.</p>
+        <h2>How to Cite</h2>
+        <p>To reference this framework in professional or academic work:</p>
+        <div class="cite-box">
+          Goncalves, Luiz Henrique Carrilho. (2026). <em>Integrated System Architecture Framework (ISAF), Version 1.0.</em>
+          <a href="https://operfildoluiz.github.io/isaf" target="_blank">https://operfildoluiz.github.io/isaf</a>
+        </div>
+        <p>
+          The full technical exposition of ISAF - including a detailed case study with quantified outcomes across all five phases - is available in the
+          companion paper:
+        </p>
+        <div class="cite-box">
+          Goncalves, Luiz Henrique Carrilho. (2026). "Why Most System Integration Projects Fail and the Five-Phase Framework That Fixes It." <em>Medium.</em
+          ><br />
+          <a
+            href="https://medium.com/@operfildoluiz/why-most-system-integration-projects-fail-and-the-five-phase-framework-that-fixes-it-753ddee48170"
+            target="_blank"
+            >https://medium.com/@operfildoluiz/why-most-system-integration-projects-fail-and-the-five-phase-framework-that-fixes-it-753ddee48170</a
+          >
+        </div>
+      </section>
+
+      <footer>
+        <span>ISAF &mdash; Integrated System Architecture Framework &mdash; Version 1.0 &mdash; 2026</span>
+        <span
+          >Luiz Goncalves &mdash; <a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a> &mdash;
+          <a href="https://medium.com/@operfildoluiz" target="_blank">medium.com/@operfildoluiz</a></span
+        >
+      </footer>
+    </div>
+  </body>
+</html>
